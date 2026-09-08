@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   version="1.1"
+   id="svg18"
+   width="200"
+   height="200"
+   viewBox="0 0 199.99999 199.99999"
+   sodipodi:docname="Rotate_logo_vector.eps"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs22" />
+  <sodipodi:namedview
+     id="namedview20"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="false" />
+  <g
+     id="g26"
+     inkscape:groupmode="layer"
+     inkscape:label="Page 1"
+     transform="matrix(1.3333333,0,0,-1.3333333,0,283.29333)">
+    <g
+       id="g28"
+       transform="scale(0.1)">
+      <path
+         d="m 782.29704,967.96607 c -222.25246,0 -402.39981,180.13683 -402.39981,402.38823 0,222.2535 180.14735,402.4008 402.39981,402.4008 110.70896,0 210.67636,-44.9814 283.40816,-117.3138 l -370.26382,-209.1059 119.79937,-236.0018 366.42895,207.0981 c 0.017,-0.1141 0.035,-0.222 0.053,-0.3356 l 255.3115,144.0415 c -83.1892,295.3661 -354.2138,512.088 -676.20278,512.088 -388.18725,0 -702.870296,-314.6832 -702.870296,-702.8713 0,-388.18457 314.683046,-702.86813 702.870296,-702.86813 210.05505,0 398.58258,92.13641 527.38358,238.20375 L 1080.3977,1100.0676 C 1006.787,1018.9102 900.50778,967.96607 782.29748,967.96607"
+         style="fill:#ee2a28;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.887731"
+         id="path30" />
+    </g>
+  </g>
+</svg>

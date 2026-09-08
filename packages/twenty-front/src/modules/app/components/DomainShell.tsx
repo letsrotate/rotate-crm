@@ -8,6 +8,8 @@ import { clientConfigApiStatusState } from '@/client-config/states/clientConfigA
 import { isMultiWorkspaceEnabledState } from '@/client-config/states/isMultiWorkspaceEnabledState';
 import { useIsCurrentLocationOnDefaultDomain } from '@/domain-manager/hooks/useIsCurrentLocationOnDefaultDomain';
 import { OnboardingPageLoader } from '@/onboarding/components/OnboardingPageLoader';
+import { RotateLandingPage } from '@/rotate-landing/components/RotateLandingPage';
+import { useIsCurrentLocationOnLandingDomain } from '@/rotate-landing/hooks/useIsCurrentLocationOnLandingDomain';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
 import { UserOrMetadataLoader } from '~/loading/components/UserOrMetadataLoader';
 
@@ -17,6 +19,7 @@ export const DomainShell = () => {
     isMultiWorkspaceEnabledState,
   );
   const { isDefaultDomain } = useIsCurrentLocationOnDefaultDomain();
+  const { isLandingDomain } = useIsCurrentLocationOnLandingDomain();
 
   if (!isLoadedOnce) {
     return (
@@ -34,6 +37,12 @@ export const DomainShell = () => {
 
   if (!isMultiWorkspaceEnabled) {
     return <WorkspaceApp />;
+  }
+
+  // Rotate fork: the bare apex serves the marketing/landing page; sign-in
+  // stays on the default subdomain and tenants on their own subdomains.
+  if (isLandingDomain) {
+    return <RotateLandingPage />;
   }
 
   return isDefaultDomain ? <RootApp /> : <WorkspaceApp />;
