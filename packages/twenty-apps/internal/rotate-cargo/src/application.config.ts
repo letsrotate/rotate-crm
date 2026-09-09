@@ -1,9 +1,6 @@
 import { defineApplication, FieldType } from 'twenty-sdk/define';
 
-import {
-  APPLICATION_UNIVERSAL_IDENTIFIER,
-  DEFAULT_ROLE_UNIVERSAL_IDENTIFIER,
-} from 'src/constants/universal-identifiers';
+import { APPLICATION_UNIVERSAL_IDENTIFIER } from 'src/constants/universal-identifiers';
 
 export default defineApplication({
   universalIdentifier: APPLICATION_UNIVERSAL_IDENTIFIER,
@@ -15,7 +12,6 @@ export default defineApplication({
   websiteUrl: 'https://letsrotate.com',
   emailSupport: 'support@letsrotate.com',
   issueReportUrl: 'https://github.com/letsrotate/rotate-crm/issues',
-  defaultRoleUniversalIdentifier: DEFAULT_ROLE_UNIVERSAL_IDENTIFIER,
   // Per-workspace: which airline this tenant is in the Sales Cockpit.
   applicationVariables: {
     SALES_COCKPIT_TENANT: {

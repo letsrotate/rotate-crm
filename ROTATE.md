@@ -48,4 +48,22 @@ Everything else is upstream. Prefer adding features as Twenty **applications** (
 
 ## Local development
 
-Upstream instructions apply (`CLAUDE.md`). Node 24 is required (`.nvmrc`). To run the landing page locally set `IS_MULTIWORKSPACE_ENABLED=true`, `FRONTEND_URL=http://localhost:3001` and browse `http://localhost:3001` (landing) vs `http://app.localhost:3001` (sign-in).
+One command on top of upstream's setup (needs Docker and Node 24, see `.nvmrc`):
+
+```bash
+bash packages/twenty-utils/rotate-dev-env.sh   # Postgres + Redis in Docker, .env files, migrations, then Rotate's multi-tenant overrides
+npx nx database:reset twenty-server            # first time only: seeds the "Apple" and "YC" demo workspaces
+yarn start                                     # server :3000, front :3001, worker
+```
+
+Then, exactly like production but on `localhost`:
+
+| URL | What |
+|---|---|
+| `http://localhost:3001` | Rotate landing page |
+| `http://app.localhost:3001` | sign in / sign up (dev login is prefilled) |
+| `http://apple.localhost:3001`, `http://yc.localhost:3001` | seeded tenant workspaces |
+
+Browsers resolve `*.localhost` to loopback and Vite proxies every API path, so no hosts-file edits and no CORS. `--reset` wipes the data, `--down` stops the containers. Local differences from prod: anyone may create workspaces, the file store is on disk, email is logged instead of sent.
+
+To work on the cargo app against that server: create an API key in the workspace (Settings → APIs & Webhooks), then from `packages/twenty-apps/internal/rotate-cargo` run `yarn twenty remote:add --url http://apple.localhost:3000 --api-key <key> --as local` and `yarn twenty dev --remote local` for live sync (see the app's README).
