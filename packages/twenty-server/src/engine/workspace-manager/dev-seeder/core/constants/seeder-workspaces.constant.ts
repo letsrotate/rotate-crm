@@ -48,7 +48,7 @@ export const SEEDER_CREATE_WORKSPACE_INPUT = {
     displayName: 'Rotate Airlines',
     subdomain: 'rotate',
     inviteHash: 'rotate.dev-invite-hash',
-    logo: '',
+    logo: '/images/rotate/rotate-logo-stars.svg',
     activationStatus: WorkspaceActivationStatus.PENDING_CREATION, // will be set to active after default role creation
     isTwoFactorAuthenticationEnforced: false,
   },
