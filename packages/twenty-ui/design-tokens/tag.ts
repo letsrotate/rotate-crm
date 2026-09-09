@@ -1,3 +1,4 @@
+import { BLUE_COLOR_TOKENS } from './color/blue';
 import { COLOR_TOKENS } from './color';
 import { GRAY_SCALE_TOKENS } from './grayScale';
 export const TAG_TOKENS = {
@@ -20,7 +21,8 @@ export const TAG_TOKENS = {
     cyan: COLOR_TOKENS.cyan11,
     turquoise: COLOR_TOKENS.turquoise11,
     sky: COLOR_TOKENS.sky11,
-    blue: COLOR_TOKENS.blue11,
+    // Rotate fork: select-option "blue" stays blue even though the app hue is red.
+    blue: BLUE_COLOR_TOKENS.scale.blue11,
     jade: COLOR_TOKENS.jade11,
     green: COLOR_TOKENS.green11,
     grass: COLOR_TOKENS.grass11,
@@ -52,7 +54,7 @@ export const TAG_TOKENS = {
     cyan: COLOR_TOKENS.cyan3,
     turquoise: COLOR_TOKENS.turquoise3,
     sky: COLOR_TOKENS.sky3,
-    blue: COLOR_TOKENS.blue3,
+    blue: BLUE_COLOR_TOKENS.scale.blue3,
     jade: COLOR_TOKENS.jade3,
     green: COLOR_TOKENS.green3,
     grass: COLOR_TOKENS.grass3,

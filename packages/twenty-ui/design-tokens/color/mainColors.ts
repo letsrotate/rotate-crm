@@ -1,5 +1,4 @@
 import { AMBER_COLOR_TOKENS } from './amber';
-import { BLUE_COLOR_TOKENS } from './blue';
 import { BRONZE_COLOR_TOKENS } from './bronze';
 import { BROWN_COLOR_TOKENS } from './brown';
 import { CRIMSON_COLOR_TOKENS } from './crimson';
@@ -17,6 +16,7 @@ import { PINK_COLOR_TOKENS } from './pink';
 import { PLUM_COLOR_TOKENS } from './plum';
 import { PURPLE_COLOR_TOKENS } from './purple';
 import { RED_COLOR_TOKENS } from './red';
+import { ROTATE_RED_COLOR_TOKENS } from './rotateRed';
 import { RUBY_COLOR_TOKENS } from './ruby';
 import { SKY_COLOR_TOKENS } from './sky';
 import { TOMATO_COLOR_TOKENS } from './tomato';
@@ -41,7 +41,8 @@ export const MAIN_COLOR_TOKENS = {
   turquoise: TURQUOISE_COLOR_TOKENS.scale.turquoise9,
   cyan: CYAN_COLOR_TOKENS.scale.cyan9,
   sky: SKY_COLOR_TOKENS.scale.sky9,
-  blue: BLUE_COLOR_TOKENS.scale.blue9,
+  // Rotate fork: the interactive "blue" is Rotate Red (see color/index.ts).
+  blue: ROTATE_RED_COLOR_TOKENS.scale.rotateRed9,
   iris: IRIS_COLOR_TOKENS.scale.iris9,
   violet: VIOLET_COLOR_TOKENS.scale.violet9,
   purple: PURPLE_COLOR_TOKENS.scale.purple9,

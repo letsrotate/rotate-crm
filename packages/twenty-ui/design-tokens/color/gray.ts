@@ -1,54 +1,57 @@
 import { token } from '../token';
 
+// Rotate fork: the neutral ramp is Rotate's (rotate-website design-tokens.css):
+// white -> mist (#ECF0EB) -> slate (#5F6468) -> ink (#0F1111), with a faint
+// green cast instead of Twenty's pure greys. Dark mode mirrors it from ink.
 export const GRAY_COLOR_TOKENS = {
   scale: {
     gray1: token({
-      light: 'color(display-p3 1 1 1)',
-      dark: 'color(display-p3 0.09 0.09 0.09)',
+      light: '#FFFFFF',
+      dark: '#0F1111',
     }),
     gray2: token({
-      light: 'color(display-p3 0.988 0.988 0.988)',
-      dark: 'color(display-p3 0.106 0.106 0.106)',
+      light: '#FAFBF9',
+      dark: '#151717',
     }),
     gray3: token({
-      light: 'color(display-p3 0.976 0.976 0.976)',
-      dark: 'color(display-p3 0.098 0.098 0.098)',
+      light: '#F6F8F5',
+      dark: '#1B1E1E',
     }),
     gray4: token({
-      light: 'color(display-p3 0.945 0.945 0.945)',
-      dark: 'color(display-p3 0.114 0.114 0.114)',
+      light: '#ECF0EB',
+      dark: '#202424',
     }),
     gray5: token({
-      light: 'color(display-p3 0.922 0.922 0.922)',
-      dark: 'color(display-p3 0.133 0.133 0.133)',
+      light: '#E2E6E1',
+      dark: '#262A2A',
     }),
     gray6: token({
-      light: 'color(display-p3 0.839 0.839 0.839)',
-      dark: 'color(display-p3 0.282 0.282 0.282)',
+      light: '#D7DCD9',
+      dark: '#333838',
     }),
     gray7: token({
-      light: 'color(display-p3 0.8 0.8 0.8)',
-      dark: 'color(display-p3 0.298 0.298 0.298)',
+      light: '#C9CFCB',
+      dark: '#3F4445',
     }),
     gray8: token({
-      light: 'color(display-p3 0.702 0.702 0.702)',
-      dark: 'color(display-p3 0.4 0.4 0.4)',
+      light: '#B8BDBC',
+      dark: '#525758',
     }),
     gray9: token({
-      light: 'color(display-p3 0.6 0.6 0.6)',
-      dark: 'color(display-p3 0.506 0.506 0.506)',
+      light: '#8A8F92',
+      dark: '#6F7477',
     }),
     gray10: token({
-      light: 'color(display-p3 0.514 0.514 0.514)',
-      dark: 'color(display-p3 0.482 0.482 0.482)',
+      light: '#6F7477',
+      dark: '#8A8F92',
     }),
     gray11: token({
-      light: 'color(display-p3 0.4 0.4 0.4)',
-      dark: 'color(display-p3 0.702 0.702 0.702)',
+      light: '#4C5153',
+      dark: '#B8BDBC',
     }),
     gray12: token({
-      light: 'color(display-p3 0.2 0.2 0.2)',
-      dark: 'color(display-p3 0.922 0.922 0.922)',
+      light: '#0F1111',
+      dark: '#ECF0EB',
     }),
   },
   transparent: {

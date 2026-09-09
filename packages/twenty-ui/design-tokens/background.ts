@@ -1,4 +1,5 @@
 import { COLOR_TOKENS } from './color';
+import { ROTATE_RED_COLOR_TOKENS } from './color/rotateRed';
 import { GRAY_SCALE_TOKENS } from './grayScale';
 import { token } from './token';
 export const BACKGROUND_TOKENS = {
@@ -31,7 +32,7 @@ export const BACKGROUND_TOKENS = {
     light: COLOR_TOKENS.transparent.gray2,
     lighter: COLOR_TOKENS.transparent.gray1,
     danger: COLOR_TOKENS.transparent.red3,
-    blue: token({ light: '#0047f112', dark: '#3566ff57' }),
+    blue: ROTATE_RED_COLOR_TOKENS.transparent.rotateRed3,
     orange: token({ light: '#ff9c0029', dark: '#ff590039' }),
     success: token({ light: '#00a43319', dark: '#11ff992d' }),
   },

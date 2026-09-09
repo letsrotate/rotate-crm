@@ -19,6 +19,7 @@ import { PINK_COLOR_TOKENS } from './pink';
 import { PLUM_COLOR_TOKENS } from './plum';
 import { PURPLE_COLOR_TOKENS } from './purple';
 import { RED_COLOR_TOKENS } from './red';
+import { ROTATE_RED_COLOR_TOKENS } from './rotateRed';
 import { RUBY_COLOR_TOKENS } from './ruby';
 import { SAGE_COLOR_TOKENS } from './sage';
 import { SAND_COLOR_TOKENS } from './sand';
@@ -30,6 +31,13 @@ import { VIOLET_COLOR_TOKENS } from './violet';
 import { YELLOW_COLOR_TOKENS } from './yellow';
 import { MAIN_COLOR_TOKENS } from './mainColors';
 
+const ROTATE_BLUE_AS_BRAND_TOKENS = Object.fromEntries(
+  Object.entries(ROTATE_RED_COLOR_TOKENS.scale).map(([name, value]) => [
+    name.replace('rotateRed', 'blue'),
+    value,
+  ]),
+);
+
 export const COLOR_TOKENS = {
   ...MAIN_COLOR_TOKENS,
   ...YELLOW_COLOR_TOKENS.scale,
@@ -37,6 +45,10 @@ export const COLOR_TOKENS = {
   ...TURQUOISE_COLOR_TOKENS.scale,
   ...SKY_COLOR_TOKENS.scale,
   ...BLUE_COLOR_TOKENS.scale,
+  // Rotate fork: Twenty uses the `blue` scale as its interactive hue (primary
+  // buttons, checkboxes, links, selection). Rotate's is red, so `blue1..12`
+  // resolve to the Rotate red ramp here; tags keep true blue (tag.ts).
+  ...ROTATE_BLUE_AS_BRAND_TOKENS,
   ...PURPLE_COLOR_TOKENS.scale,
   ...PINK_COLOR_TOKENS.scale,
   ...RED_COLOR_TOKENS.scale,
