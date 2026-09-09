@@ -34,19 +34,21 @@ export type SeededWorkspacesIds =
 export const SEEDER_CREATE_WORKSPACE_INPUT = {
   [SEED_APPLE_WORKSPACE_ID]: {
     id: SEED_APPLE_WORKSPACE_ID,
-    displayName: 'Apple',
-    subdomain: 'apple',
-    inviteHash: 'apple.dev-invite-hash',
-    logo: 'https://twentyhq.github.io/placeholder-images/workspaces/apple-logo.png',
+    // Rotate fork: the first dev tenant is Etihad Airways (hub AUH).
+    displayName: 'Etihad Airways',
+    subdomain: 'etihad',
+    inviteHash: 'etihad.dev-invite-hash',
+    logo: '',
     activationStatus: WorkspaceActivationStatus.PENDING_CREATION, // will be set to active after default role creation
     isTwoFactorAuthenticationEnforced: false,
   },
   [SEED_YCOMBINATOR_WORKSPACE_ID]: {
     id: SEED_YCOMBINATOR_WORKSPACE_ID,
-    displayName: 'YCombinator',
-    subdomain: 'yc',
-    inviteHash: 'yc.dev-invite-hash',
-    logo: 'https://twentyhq.github.io/placeholder-images/workspaces/ycombinator-logo.png',
+    // Rotate fork: the second dev tenant is the fictional Rotate Airlines (hub AMS).
+    displayName: 'Rotate Airlines',
+    subdomain: 'rotate',
+    inviteHash: 'rotate.dev-invite-hash',
+    logo: '',
     activationStatus: WorkspaceActivationStatus.PENDING_CREATION, // will be set to active after default role creation
     isTwoFactorAuthenticationEnforced: false,
   },

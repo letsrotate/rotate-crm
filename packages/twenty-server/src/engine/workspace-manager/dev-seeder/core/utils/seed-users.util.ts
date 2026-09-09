@@ -1,5 +1,11 @@
 import { type QueryRunner } from 'typeorm';
 
+import {
+  ROTATE_SEED_PASSWORD_HASH,
+  ROTATE_STAFF,
+  rotateStaffUserId,
+} from 'src/engine/workspace-manager/dev-seeder/core/constants/rotate-staff.constant';
+
 import { generateRandomUsers } from './generate-random-users.util';
 
 const tableName = 'user';
@@ -22,63 +28,17 @@ type SeedUsersArgs = {
 };
 
 export const seedUsers = async ({ queryRunner, schemaName }: SeedUsersArgs) => {
-  const originalUsers = [
-    {
-      id: USER_DATA_SEED_IDS.TIM,
-      firstName: 'Tim',
-      lastName: 'Apple',
-      email: 'tim@apple.dev',
-      passwordHash:
-        '$2b$10$3LwXjJRtLsfx4hLuuXhxt.3mWgismTiZFCZSG3z9kDrSfsrBl0fT6', // tim@apple.dev
-      canImpersonate: true,
-      canAccessFullAdminPanel: true,
-      isEmailVerified: true,
-    },
-    {
-      id: USER_DATA_SEED_IDS.JONY,
-      firstName: 'Jony',
-      lastName: 'Ive',
-      email: 'jony.ive@apple.dev',
-      passwordHash:
-        '$2b$10$3LwXjJRtLsfx4hLuuXhxt.3mWgismTiZFCZSG3z9kDrSfsrBl0fT6', // tim@apple.dev
-      canImpersonate: true,
-      canAccessFullAdminPanel: true,
-      isEmailVerified: true,
-    },
-    {
-      id: USER_DATA_SEED_IDS.PHIL,
-      firstName: 'Phil',
-      lastName: 'Schiler',
-      email: 'phil.schiler@apple.dev',
-      passwordHash:
-        '$2b$10$3LwXjJRtLsfx4hLuuXhxt.3mWgismTiZFCZSG3z9kDrSfsrBl0fT6', // tim@apple.dev
-      canImpersonate: true,
-      canAccessFullAdminPanel: true,
-      isEmailVerified: true,
-    },
-    {
-      id: USER_DATA_SEED_IDS.JANE,
-      firstName: 'Jane',
-      lastName: 'Austen',
-      email: 'jane.austen@apple.dev',
-      passwordHash:
-        '$2b$10$3LwXjJRtLsfx4hLuuXhxt.3mWgismTiZFCZSG3z9kDrSfsrBl0fT6', // tim@apple.dev
-      canImpersonate: true,
-      canAccessFullAdminPanel: true,
-      isEmailVerified: true,
-    },
-    {
-      id: USER_DATA_SEED_IDS.SCOTT,
-      firstName: 'Scott',
-      lastName: 'Forstall',
-      email: 'scott.forstall@apple.dev',
-      passwordHash:
-        '$2b$10$3LwXjJRtLsfx4hLuuXhxt.3mWgismTiZFCZSG3z9kDrSfsrBl0fT6', // tim@apple.dev
-      canImpersonate: false,
-      canAccessFullAdminPanel: false,
-      isEmailVerified: true,
-    },
-  ];
+  // Rotate fork: users are the airline sales staff (core/constants/rotate-staff.constant.ts).
+  const originalUsers = ROTATE_STAFF.map((staff, index) => ({
+    id: rotateStaffUserId(index),
+    firstName: staff.firstName,
+    lastName: staff.lastName,
+    email: staff.email,
+    passwordHash: ROTATE_SEED_PASSWORD_HASH,
+    canImpersonate: staff.cargoRole === 'PLATFORM_ADMIN',
+    canAccessFullAdminPanel: staff.cargoRole === 'PLATFORM_ADMIN',
+    isEmailVerified: true,
+  }));
 
   const allUsers = [...originalUsers, ...randomUsers];
 

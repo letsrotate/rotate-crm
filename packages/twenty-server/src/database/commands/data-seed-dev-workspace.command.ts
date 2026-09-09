@@ -38,15 +38,21 @@ export class DataSeedWorkspaceCommand extends CommandRunner {
     _passedParams: string[],
     options: DataSeedWorkspaceOptions,
   ): Promise<void> {
-    const workspaceIds: SeededWorkspacesIds[] = options.light
-      ? [SEED_APPLE_WORKSPACE_ID]
-      : [SEED_APPLE_WORKSPACE_ID, SEED_YCOMBINATOR_WORKSPACE_ID];
+    // Rotate fork: both airline tenants are always seeded, and always in
+    // light mode (no demo custom objects, staff only). Demo cargo data comes
+    // from the Rotate Cargo application; see packages/twenty-utils/rotate-dev-env.sh.
+    const workspaceIds: SeededWorkspacesIds[] = [
+      SEED_APPLE_WORKSPACE_ID,
+      SEED_YCOMBINATOR_WORKSPACE_ID,
+    ];
+
+    if (options.light) {
+      this.logger.log('--light is implied on the Rotate fork');
+    }
 
     try {
       for (const workspaceId of workspaceIds) {
-        await this.devSeederService.seedDev(workspaceId, {
-          light: options.light,
-        });
+        await this.devSeederService.seedDev(workspaceId, { light: true });
       }
     } catch (error) {
       this.logger.error(error);

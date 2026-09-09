@@ -1,6 +1,6 @@
 {
   "name": "@letsrotate/rotate-cargo",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "Air cargo sales for Rotate CRM: forwarder, station and lane data model plus the Sales Cockpit initiative sync.",
   "license": "MIT",
   "engines": {

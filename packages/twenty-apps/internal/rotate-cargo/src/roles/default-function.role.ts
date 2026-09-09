@@ -1,4 +1,7 @@
-import { defineApplicationRole } from 'twenty-sdk/define';
+import {
+  defineApplicationRole,
+  SystemPermissionFlag,
+} from 'twenty-sdk/define';
 
 import { DEFAULT_ROLE_UNIVERSAL_IDENTIFIER } from 'src/constants/universal-identifiers';
 
@@ -8,9 +11,12 @@ export default defineApplicationRole({
   universalIdentifier: DEFAULT_ROLE_UNIVERSAL_IDENTIFIER,
   label: 'Rotate Cargo sync',
   description:
-    'Reads companies and writes stations, lanes and Sales Cockpit initiatives.',
+    'Reads companies, writes stations, lanes and Sales Cockpit initiatives, and sets cargo roles on members.',
   canReadAllObjectRecords: true,
   canUpdateAllObjectRecords: true,
   canSoftDeleteAllObjectRecords: true,
   canDestroyAllObjectRecords: false,
+  // The sync and the demo seed set cargoRole / station on workspace members,
+  // which is a settings-level write.
+  permissionFlagUniversalIdentifiers: [SystemPermissionFlag.WORKSPACE_MEMBERS],
 });

@@ -3,6 +3,11 @@ import {
   SEED_YCOMBINATOR_WORKSPACE_ID,
 } from 'src/engine/workspace-manager/dev-seeder/core/constants/seeder-workspaces.constant';
 import { generateRandomUsers } from 'src/engine/workspace-manager/dev-seeder/core/utils/generate-random-users.util';
+import {
+  getRotateStaffForWorkspace,
+  rotateStaffUserId,
+  rotateStaffWorkspaceMemberId,
+} from 'src/engine/workspace-manager/dev-seeder/core/constants/rotate-staff.constant';
 import { USER_DATA_SEED_IDS } from 'src/engine/workspace-manager/dev-seeder/core/utils/seed-users.util';
 
 type WorkspaceMemberDataSeed = {
@@ -101,22 +106,14 @@ export const WORKSPACE_MEMBER_DATA_SEEDS: WorkspaceMemberDataSeed[] = [
 
 export const getWorkspaceMemberDataSeeds = (
   workspaceId: string,
-): WorkspaceMemberDataSeed[] => {
-  // In test environment, only return original members to avoid conflicts
-  // (Scott is appended for Apple to back the impersonation escalation test).
-  if (process.env.NODE_ENV === 'test') {
-    return workspaceId === SEED_APPLE_WORKSPACE_ID
-      ? [...originalWorkspaceMembers, ...appleOnlyWorkspaceMembers]
-      : originalWorkspaceMembers;
-  }
-
-  if (workspaceId === SEED_APPLE_WORKSPACE_ID) {
-    // Apple workspace gets all workspace members (original + random + Scott)
-    return [...WORKSPACE_MEMBER_DATA_SEEDS, ...appleOnlyWorkspaceMembers];
-  } else if (workspaceId === SEED_YCOMBINATOR_WORKSPACE_ID) {
-    // YC workspace gets all 4 original workspace members
-    return originalWorkspaceMembers;
-  }
-
-  return originalWorkspaceMembers;
-};
+): WorkspaceMemberDataSeed[] =>
+  // Rotate fork: members are the airline staff for this tenant.
+  getRotateStaffForWorkspace(workspaceId).map(({ staff, index }) => ({
+    id: rotateStaffWorkspaceMemberId(index, workspaceId),
+    nameFirstName: staff.firstName,
+    nameLastName: staff.lastName,
+    locale: 'en',
+    colorScheme: 'Light',
+    userEmail: staff.email,
+    userId: rotateStaffUserId(index),
+  }));

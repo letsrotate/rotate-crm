@@ -36,6 +36,7 @@ type CompanyRecord = {
   salesCockpitAgentName: string | null;
 };
 type StationRecord = { id: string; iataCode: string };
+type MemberRecord = { id: string; userEmail: string | null };
 type LaneRecord = { id: string; name: string };
 
 // The generated client types only know the standard objects; this app's own
@@ -235,7 +236,7 @@ export const salesCockpitSyncHandler =
           }),
         );
 
-      const [existing, companies] = await Promise.all([
+      const [existing, companies, members] = await Promise.all([
         listAll<ExistingInitiative>(client, 'salesInitiatives', {
           id: true,
           externalId: true,
@@ -245,7 +246,16 @@ export const salesCockpitSyncHandler =
           name: true,
           salesCockpitAgentName: true,
         }),
+        listAll<MemberRecord>(client, 'workspaceMembers', {
+          id: true,
+          userEmail: true,
+        }),
       ]);
+
+      // Cockpit assignees are the airline's own staff, matched on email.
+      const memberIdByEmail = new Map(
+        members.map((member) => [normalizeKey(member.userEmail), member.id]),
+      );
 
       const stationCodes = mapped
         .flatMap((fields) => {
@@ -279,6 +289,9 @@ export const salesCockpitSyncHandler =
           fields,
           relations: {
             forwarderId,
+            assigneeId: fields.assigneeEmail
+              ? (memberIdByEmail.get(normalizeKey(fields.assigneeEmail)) ?? null)
+              : null,
             stationId: fields.stationIata
               ? (stations.byIata.get(fields.stationIata) ?? null)
               : null,

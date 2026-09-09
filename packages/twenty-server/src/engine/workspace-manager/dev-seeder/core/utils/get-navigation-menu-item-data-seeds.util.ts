@@ -5,6 +5,8 @@ import { NAVIGATION_MENU_ITEM_SEEDS } from 'src/engine/workspace-manager/dev-see
 import { PAGE_LAYOUT_SEEDS } from 'src/engine/workspace-manager/dev-seeder/core/constants/page-layout-seeds.constant';
 import { generateSeedId } from 'src/engine/workspace-manager/dev-seeder/core/utils/generate-seed-id.util';
 
+const ROTATE_SEED_UPSTREAM_NAVIGATION_ITEMS = false;
+
 export const getNavigationMenuItemFlatEntitySeeds = ({
   workspaceId,
   flatApplication,
@@ -13,6 +15,12 @@ export const getNavigationMenuItemFlatEntitySeeds = ({
   flatApplication: FlatApplication;
 }): FlatNavigationMenuItem[] => {
   const now = new Date().toISOString();
+
+  // Rotate fork: upstream's "Star History" page stays seeded (a command menu
+  // item references it) but is not pinned to the sidebar of an airline tenant.
+  if (!ROTATE_SEED_UPSTREAM_NAVIGATION_ITEMS) {
+    return [];
+  }
 
   return [
     {

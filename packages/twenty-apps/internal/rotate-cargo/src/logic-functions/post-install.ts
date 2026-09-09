@@ -4,7 +4,8 @@ import { definePostInstallLogicFunction } from 'twenty-sdk/define';
 import { POST_INSTALL_LOGIC_FUNCTION_ID } from 'src/constants/universal-identifiers';
 
 // Major cargo stations so Lanes and Initiatives have something to link to on
-// day one; the sync adds any others it meets.
+// day one; the sync adds any others it meets. Full demo tenants (regions,
+// staff, forwarders, initiatives) come from POST /s/rotate-cargo/seed-demo.
 const SEED_STATIONS = [
   ['AMS', 'Amsterdam Schiphol', 'Netherlands', 'EUROPE'],
   ['FRA', 'Frankfurt', 'Germany', 'EUROPE'],

@@ -2,6 +2,7 @@ import { defineView, ViewSortDirection, ViewType } from 'twenty-sdk/define';
 
 import {
   ALL_INITIATIVES_VIEW_ID,
+  SALES_INITIATIVE_ASSIGNEE_FIELD_ID,
   SALES_INITIATIVE_FORWARDER_FIELD_ID,
   SALES_INITIATIVE_LANE_FIELD_ID,
   SALES_INITIATIVE_NAME_FIELD_ID,
@@ -25,7 +26,8 @@ export const SALES_INITIATIVE_TABLE_VIEW_FIELDS = (prefix: string) => [
   { universalIdentifier: `${prefix}7`, fieldMetadataUniversalIdentifier: SALES_INITIATIVE_TARGET_TONNES_FIELD_ID, position: 6, isVisible: true, size: 140 },
   { universalIdentifier: `${prefix}8`, fieldMetadataUniversalIdentifier: SALES_INITIATIVE_TARGET_YIELD_FIELD_ID, position: 7, isVisible: true, size: 140 },
   { universalIdentifier: `${prefix}9`, fieldMetadataUniversalIdentifier: SALES_INITIATIVE_REVENUE_WEEKLY_FIELD_ID, position: 8, isVisible: true, size: 160 },
-  { universalIdentifier: `${prefix}a`, fieldMetadataUniversalIdentifier: SALES_INITIATIVE_RUN_TIMESTAMP_FIELD_ID, position: 9, isVisible: true, size: 160 },
+  { universalIdentifier: `${prefix}a`, fieldMetadataUniversalIdentifier: SALES_INITIATIVE_ASSIGNEE_FIELD_ID, position: 9, isVisible: true, size: 180 },
+  { universalIdentifier: `${prefix}b`, fieldMetadataUniversalIdentifier: SALES_INITIATIVE_RUN_TIMESTAMP_FIELD_ID, position: 10, isVisible: true, size: 160 },
 ];
 
 export default defineView({

@@ -1,12 +1,12 @@
 import { type QueryRunner } from 'typeorm';
 
 import { type UserWorkspaceEntity } from 'src/engine/core-modules/user-workspace/user-workspace.entity';
-import {
-  SEED_APPLE_WORKSPACE_ID,
-  SEED_YCOMBINATOR_WORKSPACE_ID,
-} from 'src/engine/workspace-manager/dev-seeder/core/constants/seeder-workspaces.constant';
 import { generateRandomUsers } from 'src/engine/workspace-manager/dev-seeder/core/utils/generate-random-users.util';
-import { USER_DATA_SEED_IDS } from 'src/engine/workspace-manager/dev-seeder/core/utils/seed-users.util';
+import {
+  getRotateStaffForWorkspace,
+  rotateStaffUserId,
+  rotateStaffUserWorkspaceId,
+} from 'src/engine/workspace-manager/dev-seeder/core/constants/rotate-staff.constant';
 
 const tableName = 'userWorkspace';
 
@@ -22,10 +22,7 @@ export const USER_WORKSPACE_DATA_SEED_IDS = {
   SCOTT: '20202020-1111-4a01-8001-000000000002',
 };
 
-const {
-  userWorkspaces: randomUserWorkspaces,
-  userWorkspaceIds: randomUserWorkspaceIds,
-} = generateRandomUsers();
+const { userWorkspaceIds: randomUserWorkspaceIds } = generateRandomUsers();
 
 export const RANDOM_USER_WORKSPACE_IDS = randomUserWorkspaceIds;
 
@@ -40,67 +37,16 @@ export const seedUserWorkspaces = async ({
   schemaName,
   workspaceId,
 }: SeedUserWorkspacesArgs) => {
-  let userWorkspaces: Pick<
+  // Rotate fork: memberships come from ROTATE_STAFF (airline staff + platform admin).
+  const userWorkspaces: Pick<
     UserWorkspaceEntity,
     'id' | 'userId' | 'workspaceId'
-  >[] = [];
+  >[] = getRotateStaffForWorkspace(workspaceId).map(({ index }) => ({
+    id: rotateStaffUserWorkspaceId(index, workspaceId),
+    userId: rotateStaffUserId(index),
+    workspaceId,
+  }));
 
-  if (workspaceId === SEED_APPLE_WORKSPACE_ID) {
-    const originalUserWorkspaces = [
-      {
-        id: USER_WORKSPACE_DATA_SEED_IDS.TIM,
-        userId: USER_DATA_SEED_IDS.TIM,
-        workspaceId,
-      },
-      {
-        id: USER_WORKSPACE_DATA_SEED_IDS.JANE,
-        userId: USER_DATA_SEED_IDS.JANE,
-        workspaceId,
-      },
-      {
-        id: USER_WORKSPACE_DATA_SEED_IDS.JONY,
-        userId: USER_DATA_SEED_IDS.JONY,
-        workspaceId,
-      },
-      {
-        id: USER_WORKSPACE_DATA_SEED_IDS.PHIL,
-        userId: USER_DATA_SEED_IDS.PHIL,
-        workspaceId,
-      },
-      {
-        id: USER_WORKSPACE_DATA_SEED_IDS.SCOTT,
-        userId: USER_DATA_SEED_IDS.SCOTT,
-        workspaceId,
-      },
-    ];
-
-    userWorkspaces = [...originalUserWorkspaces, ...randomUserWorkspaces];
-  }
-
-  if (workspaceId === SEED_YCOMBINATOR_WORKSPACE_ID) {
-    userWorkspaces = [
-      {
-        id: USER_WORKSPACE_DATA_SEED_IDS.TIM_ACME,
-        userId: USER_DATA_SEED_IDS.TIM,
-        workspaceId,
-      },
-      {
-        id: USER_WORKSPACE_DATA_SEED_IDS.JONY_ACME,
-        userId: USER_DATA_SEED_IDS.JONY,
-        workspaceId,
-      },
-      {
-        id: USER_WORKSPACE_DATA_SEED_IDS.PHIL_ACME,
-        userId: USER_DATA_SEED_IDS.PHIL,
-        workspaceId,
-      },
-      {
-        id: USER_WORKSPACE_DATA_SEED_IDS.JANE_ACME,
-        userId: USER_DATA_SEED_IDS.JANE,
-        workspaceId,
-      },
-    ];
-  }
   await queryRunner.manager
     .createQueryBuilder()
     .insert()

@@ -5,6 +5,8 @@ import {
   STATION_COUNTRY_FIELD_ID,
   STATION_IATA_CODE_FIELD_ID,
   STATION_IS_HUB_FIELD_ID,
+  STATION_ACCOUNT_MANAGERS_FIELD_ID,
+  STATION_SALES_REGION_FIELD_ID,
   STATION_NAME_FIELD_ID,
   STATION_REGION_FIELD_ID,
   STATION_UNIVERSAL_IDENTIFIER,
@@ -23,6 +25,8 @@ export default defineView({
     { universalIdentifier: '371db5da-f5d9-4433-83c4-d7f681fa3858', fieldMetadataUniversalIdentifier: STATION_COUNTRY_FIELD_ID, position: 2, isVisible: true, size: 160 },
     { universalIdentifier: 'ff61e590-325e-4b51-ad4a-a0b93dda7e28', fieldMetadataUniversalIdentifier: STATION_REGION_FIELD_ID, position: 3, isVisible: true, size: 150 },
     { universalIdentifier: '9f9270a3-e553-4464-b56e-f70da750cac4', fieldMetadataUniversalIdentifier: STATION_IS_HUB_FIELD_ID, position: 4, isVisible: true, size: 90 },
+    { universalIdentifier: '01287595-4709-4a8b-8a68-6c0bc3d367db', fieldMetadataUniversalIdentifier: STATION_SALES_REGION_FIELD_ID, position: 5, isVisible: true, size: 170 },
+    { universalIdentifier: '2850e96e-3757-41f5-9d47-f7cfdb4c0d5d', fieldMetadataUniversalIdentifier: STATION_ACCOUNT_MANAGERS_FIELD_ID, position: 6, isVisible: true, size: 240 },
   ],
   sorts: [
     { universalIdentifier: 'cab42def-7a32-462b-95dc-8e3203171d5d', fieldMetadataUniversalIdentifier: STATION_IATA_CODE_FIELD_ID, direction: ViewSortDirection.ASC },

@@ -52,8 +52,9 @@ One command on top of upstream's setup (needs Docker and Node 24, see `.nvmrc`):
 
 ```bash
 bash packages/twenty-utils/rotate-dev-env.sh   # Postgres + Redis in Docker, .env files, migrations, then Rotate's multi-tenant overrides
-npx nx database:reset twenty-server            # first time only: seeds the "Apple" and "YC" demo workspaces
+npx nx database:reset twenty-server            # first time only: seeds the two airline tenants and their staff
 yarn start                                     # server :3000, front :3001, worker
+bash packages/twenty-utils/rotate-dev-env.sh --seed-cargo   # installs the Rotate Cargo app into both tenants and loads the demo datasets
 ```
 
 Then, exactly like production but on `localhost`:
@@ -61,9 +62,19 @@ Then, exactly like production but on `localhost`:
 | URL | What |
 |---|---|
 | `http://localhost:3001` | Rotate landing page |
-| `http://app.localhost:3001` | sign in / sign up (dev login is prefilled) |
-| `http://apple.localhost:3001`, `http://yc.localhost:3001` | seeded tenant workspaces |
+| `http://app.localhost:3001` | sign in (prefilled `admin@rotate.dev` / `rotate-dev`) |
+| `http://etihad.localhost:3001` | **Etihad Airways** tenant: hub AUH, four regions, 22 stations, 12 forwarders, 20 Sales Cockpit initiatives |
+| `http://rotate.localhost:3001` | **Rotate Airlines** tenant (fictional): hub AMS, four regions, 16 stations, 10 forwarders, 18 initiatives |
 
-Browsers resolve `*.localhost` to loopback and Vite proxies every API path, so no hosts-file edits and no CORS. `--reset` wipes the data, `--down` stops the containers. Local differences from prod: anyone may create workspaces, the file store is on disk, email is logged instead of sent.
+Browsers resolve `*.localhost` to loopback and Vite proxies every API path, so no hosts-file edits and no CORS. `--reset` wipes the data, `--down` stops the containers.
 
-To work on the cargo app against that server: create an API key in the workspace (Settings → APIs & Webhooks), then from `packages/twenty-apps/internal/rotate-cargo` run `yarn twenty remote:add --url http://apple.localhost:3000 --api-key <key> --as local` and `yarn twenty dev --remote local` for live sync (see the app's README).
+### Seed data
+
+The fork replaces Twenty's demo seed (Apple/YC, pets, rockets, surveys) with an airline sales organisation. Two layers:
+
+- **Dev seeder** (`packages/twenty-server/.../dev-seeder/core/constants/rotate-staff.constant.ts`): the two workspaces and their users. Every user signs in with `rotate-dev`. `admin@rotate.dev` is the Rotate platform admin (server admin, member of both tenants); each airline has a head of cargo sales (workspace admin), regional managers and station account managers. Twenty's demo objects and records are switched off (`ROTATE_DEV_SEEDED_TABLES`).
+- **Rotate Cargo app** (`packages/twenty-apps/internal/rotate-cargo/src/logic-functions/constants/demo-data/`): everything else, loaded by `POST /s/rotate-cargo/seed-demo {"tenant":"etihad"|"rotate"}`. Regions (with regional manager), stations (in a region, with account managers), forwarders (with IATA CASS code, segment, tier, home station, account owner), contacts, lanes, Sales Cockpit initiatives (linked to forwarder, station, lane, assignee), opportunities, notes and tasks. Idempotent, so it doubles as the way to (re)load a demo tenant in dev/test.
+
+The hierarchy is: **Region** → `regionalManager` (workspace member) and `stations` → **Station** → `accountManagers` (workspace members with `station` set) → forwarders via `homeStation` and `accountOwner`. Every workspace member carries a `cargoRole` (head of sales, regional manager, station manager, account manager).
+
+To work on the cargo app against a running tenant, the `--seed-cargo` step already wrote a remote per tenant into `~/.twenty/config.json`; run `yarn twenty --remote etihad dev` from the app directory for live sync.

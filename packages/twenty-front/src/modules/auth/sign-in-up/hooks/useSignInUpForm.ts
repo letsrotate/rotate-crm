@@ -64,8 +64,9 @@ export const useSignInUpForm = () => {
     }
 
     if (isDeveloperDefaultSignInPrefilled === true) {
-      form.setValue('email', prefilledEmail ?? 'tim@apple.dev');
-      form.setValue('password', 'tim@apple.dev');
+      // Rotate fork: the dev seeder's platform admin (rotate-staff.constant.ts).
+      form.setValue('email', prefilledEmail ?? 'admin@rotate.dev');
+      form.setValue('password', 'rotate-dev');
     }
   }, [form, isDeveloperDefaultSignInPrefilled, prefilledEmail]);
   return { form };

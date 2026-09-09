@@ -129,6 +129,8 @@ import { prefillWorkflows } from 'src/engine/workspace-manager/standard-objects-
 import { TWENTY_STANDARD_APPLICATION } from 'src/engine/workspace-manager/twenty-standard-application/constants/twenty-standard-applications';
 import { WorkspaceMigrationValidateBuildAndRunService } from 'src/engine/workspace-manager/workspace-migration/services/workspace-migration-validate-build-and-run-service';
 
+const ROTATE_DEV_SEEDED_TABLES = new Set(['workspaceMember']);
+
 type RecordSeedConfig = {
   tableName: string;
   pgColumns: string[];
@@ -430,6 +432,13 @@ export class DevSeederDataService {
       await Promise.all(
         batch.map(async (recordSeedsConfig) => {
           if (light && recordSeedsConfig.tableName.startsWith('_')) {
+            return;
+          }
+
+          // Rotate fork: the only records this seeder writes are the airline
+          // staff; forwarders, stations, lanes and initiatives are seeded by
+          // the Rotate Cargo application (POST /s/rotate-cargo/seed-demo).
+          if (!ROTATE_DEV_SEEDED_TABLES.has(recordSeedsConfig.tableName)) {
             return;
           }
 
