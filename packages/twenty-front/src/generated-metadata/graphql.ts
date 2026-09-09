@@ -1056,6 +1056,7 @@ export type ClientConfig = {
   isMultiWorkspaceEnabled: Scalars['Boolean']['output'];
   isOnboardingAiChatEnabled: Scalars['Boolean']['output'];
   isWorkspaceSchemaDDLLocked: Scalars['Boolean']['output'];
+  isWorkspaceSubdomainRoutingEnabled: Scalars['Boolean']['output'];
   maintenance?: Maybe<ClientConfigMaintenanceMode>;
   publicFeatureFlags: Array<PublicFeatureFlag>;
   publicFunctionDomain?: Maybe<Scalars['String']['output']>;

@@ -3,7 +3,8 @@ name: Rotate — build & publish image
 # Rotate's deploy pipeline for this fork. Not the shared letsrotate/release
 # workflow: Twenty's Dockerfile needs the monorepo root as context and the
 # `twenty` target (server + worker + built front in one image). Pushes
-# ghcr.io/letsrotate/rotate-crm:<branch> (dev/test/prod); argocd-image-updater
+# ghcr.io/letsrotate/rotate-crm:<branch> (dev only for now; add test/prod to
+# `branches` when those environments are stood up); argocd-image-updater
 # (digest strategy) rolls the new digest into argocd-workloads apps/crm.
 #
 # Upstream twentyhq workflows in this directory are disabled on the fork via
@@ -12,7 +13,7 @@ name: Rotate — build & publish image
 
 on:
   push:
-    branches: [dev, test, prod]
+    branches: [dev]
     paths-ignore:
       - 'packages/twenty-docs/**'
       - 'packages/twenty-website/**'

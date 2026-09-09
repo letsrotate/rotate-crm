@@ -3,6 +3,7 @@ import { useAuth } from '@/auth/hooks/useAuth';
 import { useVerifyLogin } from '@/auth/hooks/useVerifyLogin';
 import { clientConfigApiStatusState } from '@/client-config/states/clientConfigApiStatusState';
 import { useIsCurrentLocationOnAWorkspace } from '@/domain-manager/hooks/useIsCurrentLocationOnAWorkspace';
+import { useOrigin } from '@/domain-manager/hooks/useOrigin';
 import { useRedirectToWorkspaceDomain } from '@/domain-manager/hooks/useRedirectToWorkspaceDomain';
 import { useSnackBar } from '@/ui/feedback/snack-bar-manager/hooks/useSnackBar';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
@@ -43,6 +44,7 @@ export const VerifyEmailEffect = ({ onError }: VerifyEmailEffectProps) => {
   const { redirectToWorkspaceDomain } = useRedirectToWorkspaceDomain();
   const { verifyLoginToken } = useVerifyLogin();
   const { isOnAWorkspace } = useIsCurrentLocationOnAWorkspace();
+  const { origin } = useOrigin();
   const clientConfigApiStatus = useAtomStateValue(clientConfigApiStatusState);
 
   const { t } = useLingui();
@@ -85,7 +87,7 @@ export const VerifyEmailEffect = ({ onError }: VerifyEmailEffectProps) => {
         enqueueSuccessSnackBar(successSnackbarParams);
 
         const workspaceUrl = getWorkspaceUrl(workspaceUrls);
-        if (workspaceUrl.slice(0, -1) !== window.location.origin) {
+        if (workspaceUrl.slice(0, -1) !== origin) {
           return await redirectToWorkspaceDomain(workspaceUrl, AppPath.Verify, {
             loginToken: loginToken.token,
           });

@@ -1959,6 +1959,17 @@ export class ConfigVariables {
   @IsOptional()
   IS_MULTIWORKSPACE_ENABLED = false;
 
+  // Rotate fork: when disabled, every workspace is served from the front URL
+  // itself and selected client-side (?w=<subdomain>) instead of by hostname.
+  @ConfigVariablesMetadata({
+    group: ConfigVariablesGroup.SERVER_CONFIG,
+    description:
+      'Serve each workspace on its own <subdomain>.<front domain> host. Disable to serve every workspace from the front URL itself (multi-workspace only).',
+    type: ConfigVariableType.BOOLEAN,
+  })
+  @IsOptional()
+  IS_WORKSPACE_SUBDOMAIN_ROUTING_ENABLED = true;
+
   @ConfigVariablesMetadata({
     group: ConfigVariablesGroup.ADVANCED_SETTINGS,
     description:

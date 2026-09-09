@@ -38,6 +38,7 @@ import { UserUiScaleProviderEffect } from '@/ui/theme/components/UserUiScaleProv
 import { PageFavicon } from '@/ui/utilities/page-favicon/components/PageFavicon';
 import { PageTitle } from '@/ui/utilities/page-title/components/PageTitle';
 import { UserContextProvider } from '@/users/components/UserContextProvider';
+import { SingleHostWorkspaceGuardEffect } from '@/workspace/components/SingleHostWorkspaceGuardEffect';
 import { WorkspaceProviderEffect } from '@/workspace/components/WorkspaceProviderEffect';
 import { getPageTitleFromPath } from '~/utils/title-utils';
 
@@ -51,6 +52,7 @@ export const WorkspaceAppProviders = () => {
       <MinimalMetadataLoadEffect />
       <IsMinimalMetadataReadyEffect />
       <WorkspaceProviderEffect />
+      <SingleHostWorkspaceGuardEffect />
       <CaptchaProvider>
         <UserContextProvider>
           <AuthProvider>

@@ -16,6 +16,7 @@ import { DialogComponentInstanceContext } from '@/ui/feedback/dialog-manager/con
 import { SnackBarProvider } from '@/ui/feedback/snack-bar-manager/components/SnackBarProvider';
 import { PageFavicon } from '@/ui/utilities/page-favicon/components/PageFavicon';
 import { PageTitle } from '@/ui/utilities/page-title/components/PageTitle';
+import { SingleHostWorkspaceGuardEffect } from '@/workspace/components/SingleHostWorkspaceGuardEffect';
 import { WorkspaceProviderEffect } from '@/workspace/components/WorkspaceProviderEffect';
 import { getPageTitleFromPath } from '~/utils/title-utils';
 
@@ -28,6 +29,7 @@ export const RootAppProviders = () => {
       <CaptchaProvider>
         <UserMetadataProviderInitialEffect />
         <WorkspaceProviderEffect />
+        <SingleHostWorkspaceGuardEffect />
         <AuthProvider>
           <SnackBarProvider>
             <ErrorMessageEffect />

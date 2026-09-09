@@ -1,4 +1,5 @@
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
+import { useWorkspaceSelection } from '@/domain-manager/hooks/useWorkspaceSelection';
 import { domainConfigurationState } from '@/domain-manager/states/domainConfigurationState';
 import { SaveAndCancelButtons } from '@/settings/components/SaveAndCancelButtons/SaveAndCancelButtons';
 import { SettingsPageContainer } from '@/settings/components/SettingsPageContainer';
@@ -27,6 +28,7 @@ export const SettingsSubdomain = () => {
   const navigate = useNavigateSettings();
   const { t } = useLingui();
   const domainConfiguration = useAtomStateValue(domainConfigurationState);
+  const { isSingleHostMode } = useWorkspaceSelection();
   const currentWorkspace = useAtomStateValue(currentWorkspaceState);
 
   const {
@@ -66,8 +68,12 @@ export const SettingsSubdomain = () => {
         <SettingsPageContainer>
           <Section>
             <H2Title
-              title={t`Subdomain`}
-              description={t`Set the name of your subdomain`}
+              title={isSingleHostMode ? t`Short name` : t`Subdomain`}
+              description={
+                isSingleHostMode
+                  ? t`The name that opens this workspace from the landing page`
+                  : t`Set the name of your subdomain`
+              }
             />
             <StyledDomainFormWrapper>
               <TextInput
@@ -77,7 +83,8 @@ export const SettingsSubdomain = () => {
                 error={error}
                 disabled={!!currentWorkspace?.customDomain}
                 rightAdornment={
-                  isDefined(domainConfiguration.frontDomain)
+                  isDefined(domainConfiguration.frontDomain) &&
+                  !isSingleHostMode
                     ? `.${domainConfiguration.frontDomain}`
                     : undefined
                 }

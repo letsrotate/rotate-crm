@@ -202,6 +202,8 @@ export class ClientConfigService {
       isMultiWorkspaceEnabled: this.twentyConfigService.get(
         'IS_MULTIWORKSPACE_ENABLED',
       ),
+      isWorkspaceSubdomainRoutingEnabled:
+        this.domainServerConfigService.isWorkspaceSubdomainRoutingEnabled(),
       isEmailVerificationRequired: this.twentyConfigService.get(
         'IS_EMAIL_VERIFICATION_REQUIRED',
       ),

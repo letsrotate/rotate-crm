@@ -16,13 +16,13 @@
 #       Sales Cockpit initiatives, opportunities, notes, tasks)
 #
 # Then `yarn start` and open:
-#   http://localhost:3001            Rotate landing page
-#   http://app.localhost:3001        sign in (prefilled: admin@rotate.dev / rotate-dev)
-#   http://etihad.localhost:3001     Etihad Airways tenant
-#   http://rotate.localhost:3001     Rotate Airlines tenant
+#   http://localhost:3001             Rotate landing page
+#   http://localhost:3001/welcome     sign in / create a workspace (prefilled: admin@rotate.dev / rotate-dev)
+#   http://localhost:3001/?w=etihad   Etihad Airways workspace
+#   http://localhost:3001/?w=rotate   Rotate Airlines workspace
 # Every seeded user (see rotate-staff.constant.ts) signs in with `rotate-dev`.
-# Browsers resolve *.localhost to loopback; Vite proxies the API, so every
-# host stays same-origin. Needs Node 24 (.nvmrc) and Docker.
+# Every workspace is served from the same host and selected with ?w=<name>
+# (remembered per browser). Needs Node 24 (.nvmrc) and Docker.
 # =============================================================================
 set -euo pipefail
 
@@ -46,8 +46,9 @@ print(json.dumps({"query": query, "variables": variables}))
 PY
 }
 
-# The workspace is selected by the `origin` GraphQL argument; no Origin header
-# on purpose, the cookie-session check only admits browser origins.
+# The workspace is selected by the `origin` GraphQL argument, a virtual
+# http://<workspace>.localhost origin exactly like the front sends; no Origin
+# header on purpose, the cookie-session check only admits browser origins.
 graphql() { # <origin> <json body> [bearer]
   local origin="$1" body="$2" bearer="${3:-}"
   local auth=()
@@ -141,7 +142,7 @@ PY
       -H "Authorization: Bearer $api_key" -H "Content-Type: application/json" \
       -d "{\"tenant\":\"$tenant\"}" | python3 -c 'import json,sys; d=json.load(sys.stdin); print("   ", "ok" if d.get("success") else "FAILED", json.dumps(d.get("counts") or d.get("error")), "unmatched staff:", d.get("unmatchedStaff"))'
   done
-  echo "=> Demo tenants ready: http://etihad.localhost:3001  http://rotate.localhost:3001"
+  echo "=> Demo tenants ready: http://localhost:3001/?w=etihad  http://localhost:3001/?w=rotate"
 }
 
 case "${1:-}" in
@@ -169,9 +170,10 @@ if ! grep -q "ROTATE LOCAL" "$SERVER_ENV"; then
   printf '\n# ———————— ROTATE LOCAL (rotate-dev-env.sh) ————————\n' >> "$SERVER_ENV"
 fi
 
-# Multi-tenant mode: sign-in on app.localhost, one subdomain per workspace,
-# landing page on the bare host (see ROTATE.md).
+# Multi-workspace on a single host: workspaces are selected with ?w=<name>,
+# the root path serves the landing page (see ROTATE.md).
 set_env IS_MULTIWORKSPACE_ENABLED true
+set_env IS_WORKSPACE_SUBDOMAIN_ROUTING_ENABLED false
 set_env DEFAULT_SUBDOMAIN app
 set_env SERVER_URL http://localhost:3000
 set_env FRONTEND_URL http://localhost:3001
@@ -186,6 +188,6 @@ echo "=> Rotate CRM local environment ready."
 echo "   1. npx nx database:reset twenty-server   (first time: seeds the Etihad and Rotate Airlines tenants + staff)"
 echo "   2. yarn start"
 echo "   3. bash packages/twenty-utils/rotate-dev-env.sh --seed-cargo   (installs the cargo app + demo data)"
-echo "   landing  http://localhost:3001"
-echo "   sign-in  http://app.localhost:3001   admin@rotate.dev / rotate-dev"
-echo "   tenants  http://etihad.localhost:3001  http://rotate.localhost:3001"
+echo "   landing     http://localhost:3001"
+echo "   sign-in     http://localhost:3001/welcome   admin@rotate.dev / rotate-dev"
+echo "   workspaces  http://localhost:3001/?w=etihad  http://localhost:3001/?w=rotate"

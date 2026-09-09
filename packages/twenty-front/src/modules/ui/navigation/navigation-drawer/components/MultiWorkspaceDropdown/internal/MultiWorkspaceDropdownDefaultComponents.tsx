@@ -3,7 +3,10 @@ import { DEFAULT_WORKSPACE_LOGO } from '@/ui/navigation/navigation-drawer/consta
 import { useAuth } from '@/auth/hooks/useAuth';
 import { availableWorkspacesState } from '@/auth/states/availableWorkspacesState';
 import { currentWorkspaceState } from '@/auth/states/currentWorkspaceState';
-import { countAvailableWorkspaces } from '@/auth/utils/availableWorkspacesUtils';
+import {
+  countAvailableWorkspaces,
+  getAvailableWorkspacePathAndSearchParams,
+} from '@/auth/utils/availableWorkspacesUtils';
 import { supportChatState } from '@/client-config/states/supportChatState';
 import { isMultiWorkspaceEnabledState } from '@/client-config/states/isMultiWorkspaceEnabledState';
 import { useBuildWorkspaceUrl } from '@/domain-manager/hooks/useBuildWorkspaceUrl';
@@ -89,9 +92,17 @@ export const MultiWorkspaceDropdownDefaultComponents = () => {
     closeDropdown(MULTI_WORKSPACE_DROPDOWN_ID);
   };
 
+  // Carry the workspace's login token (like AvailableWorkspaceItem does): on
+  // a single host the session cookie is shared, so landing on the workspace
+  // root would silently keep the current workspace's session.
   const handleChange = async (availableWorkspace: AvailableWorkspace) => {
+    const { pathname, searchParams } =
+      getAvailableWorkspacePathAndSearchParams(availableWorkspace);
+
     redirectToWorkspaceDomain(
       getWorkspaceUrl(availableWorkspace.workspaceUrls),
+      pathname,
+      searchParams,
     );
   };
 
@@ -164,6 +175,10 @@ export const MultiWorkspaceDropdownDefaultComponents = () => {
                   key={availableWorkspace.id}
                   to={buildWorkspaceUrl(
                     getWorkspaceUrl(availableWorkspace.workspaceUrls),
+                    getAvailableWorkspacePathAndSearchParams(availableWorkspace)
+                      .pathname,
+                    getAvailableWorkspacePathAndSearchParams(availableWorkspace)
+                      .searchParams,
                   )}
                   onClick={(event) => {
                     event?.preventDefault();

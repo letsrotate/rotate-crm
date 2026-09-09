@@ -20,11 +20,21 @@ export class DomainServerConfigService {
     );
   }
 
+  // Rotate fork: subdomain routing only exists in multi-workspace mode. When
+  // it is off, workspaces are still resolved from the (virtual) origin the
+  // front sends, but every real URL points at the front URL itself.
+  isWorkspaceSubdomainRoutingEnabled(): boolean {
+    return (
+      this.twentyConfigService.get('IS_MULTIWORKSPACE_ENABLED') &&
+      this.twentyConfigService.get('IS_WORKSPACE_SUBDOMAIN_ROUTING_ENABLED')
+    );
+  }
+
   getBaseUrl(): URL {
     const baseUrl = this.getFrontUrl();
 
     if (
-      this.twentyConfigService.get('IS_MULTIWORKSPACE_ENABLED') &&
+      this.isWorkspaceSubdomainRoutingEnabled() &&
       this.twentyConfigService.get('DEFAULT_SUBDOMAIN')
     ) {
       baseUrl.hostname = `${this.twentyConfigService.get('DEFAULT_SUBDOMAIN')}.${baseUrl.hostname}`;

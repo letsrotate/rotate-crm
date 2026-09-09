@@ -1,10 +1,11 @@
 import { Trans, useLingui } from '@lingui/react/macro';
 import { styled } from '@linaria/react';
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, type MouseEvent, useState } from 'react';
 import { isNonEmptyString } from '@sniptt/guards';
 
 import { ROTATE_BRAND } from '@/rotate-landing/constants/RotateBrand';
 import { ROTATE_LINKS } from '@/rotate-landing/constants/RotateLinks';
+import { useLastAuthenticatedWorkspaceDomain } from '@/domain-manager/hooks/useLastAuthenticatedWorkspaceDomain';
 import { useRotateLandingUrls } from '@/rotate-landing/hooks/useRotateLandingUrls';
 import { PageTitle } from '@/ui/utilities/page-title/components/PageTitle';
 
@@ -298,11 +299,22 @@ const WORKSPACE_SUBDOMAIN_PATTERN = /^[a-z0-9](?:[a-z0-9-]{0,28}[a-z0-9])?$/;
 
 export const RotateLandingPage = () => {
   const { t } = useLingui();
-  const { signInUrl, workspaceUrl } = useRotateLandingUrls();
+  const { isSingleHostMode, signInUrl, createWorkspaceUrl, workspaceUrl } =
+    useRotateLandingUrls();
+  const { setLastAuthenticateWorkspaceDomain } =
+    useLastAuthenticatedWorkspaceDomain();
   const [workspaceSubdomain, setWorkspaceSubdomain] = useState('');
 
   const normalizedSubdomain = workspaceSubdomain.trim().toLowerCase();
   const isSubdomainValid = WORKSPACE_SUBDOMAIN_PATTERN.test(normalizedSubdomain);
+
+  // A signed-in visitor is otherwise bounced from the sign-in page back to
+  // the workspace they last used (WorkspaceProviderEffect).
+  const handleCreateWorkspace = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+    setLastAuthenticateWorkspaceDomain(null);
+    window.location.assign(createWorkspaceUrl);
+  };
 
   const handleOpenWorkspace = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -355,8 +367,11 @@ export const RotateLandingPage = () => {
               <StyledPrimaryLink href={signInUrl}>
                 <Trans>Sign in to your workspace</Trans>
               </StyledPrimaryLink>
-              <StyledSecondaryLink href={ROTATE_LINKS.contact}>
-                <Trans>Request a workspace</Trans>
+              <StyledSecondaryLink
+                href={createWorkspaceUrl}
+                onClick={handleCreateWorkspace}
+              >
+                <Trans>Create a workspace</Trans>
               </StyledSecondaryLink>
             </StyledCtaRow>
           </div>
@@ -366,14 +381,23 @@ export const RotateLandingPage = () => {
               <Trans>Already have a workspace?</Trans>
             </StyledCardTitle>
             <StyledCardHint>
-              <Trans>
-                Every airline gets its own subdomain. Enter yours to go straight
-                to it.
-              </Trans>
+              {isSingleHostMode ? (
+                <Trans>
+                  Every airline has its own workspace. Enter its short name to
+                  go straight to it.
+                </Trans>
+              ) : (
+                <Trans>
+                  Every airline gets its own subdomain. Enter yours to go
+                  straight to it.
+                </Trans>
+              )}
             </StyledCardHint>
             <StyledDomainInput>
               <StyledInput
-                aria-label={t`Workspace subdomain`}
+                aria-label={
+                  isSingleHostMode ? t`Workspace name` : t`Workspace subdomain`
+                }
                 autoCapitalize="none"
                 autoCorrect="off"
                 placeholder="airline"
@@ -381,7 +405,11 @@ export const RotateLandingPage = () => {
                 value={workspaceSubdomain}
                 onChange={(event) => setWorkspaceSubdomain(event.target.value)}
               />
-              <StyledDomainSuffix>.{window.location.hostname}</StyledDomainSuffix>
+              {!isSingleHostMode && (
+                <StyledDomainSuffix>
+                  .{window.location.hostname}
+                </StyledDomainSuffix>
+              )}
             </StyledDomainInput>
             <StyledSubmitButton
               type="submit"

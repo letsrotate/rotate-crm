@@ -5,6 +5,7 @@ import { ONBOARDING_CONTENT_BLOCK_WIDTH } from '@/onboarding/constants/Onboardin
 import { useWorkspaceSubdomainField } from '@/auth/sign-in-up/hooks/useWorkspaceSubdomainField';
 import { isCreatingWorkspaceState } from '@/auth/states/isCreatingWorkspaceState';
 import { isMultiWorkspaceEnabledState } from '@/client-config/states/isMultiWorkspaceEnabledState';
+import { useWorkspaceSelection } from '@/domain-manager/hooks/useWorkspaceSelection';
 import { domainConfigurationState } from '@/domain-manager/states/domainConfigurationState';
 import { TextInput } from '@/ui/input/components/TextInput';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
@@ -139,6 +140,7 @@ export const SignInUpWorkspaceCreationForm = () => {
   const { t } = useLingui();
   const { createWorkspace } = useSignUpInNewWorkspace();
   const { frontDomain } = useAtomStateValue(domainConfigurationState);
+  const { isSingleHostMode } = useWorkspaceSelection();
   const isMultiWorkspaceEnabled = useAtomStateValue(
     isMultiWorkspaceEnabledState,
   );
@@ -304,13 +306,15 @@ export const SignInUpWorkspaceCreationForm = () => {
           <OnboardingStepAnimatedItem index={4}>
             <StyledSubdomainSection>
               <TextInput
-                label={t`Subdomain`}
+                label={isSingleHostMode ? t`Short name` : t`Subdomain`}
                 value={subdomain}
                 placeholder={t`apple`}
                 onChange={handleSubdomainChange}
                 onKeyDown={handleKeyDown}
                 rightAdornment={
-                  isNonEmptyString(frontDomain) ? `.${frontDomain}` : undefined
+                  isNonEmptyString(frontDomain) && !isSingleHostMode
+                    ? `.${frontDomain}`
+                    : undefined
                 }
                 error={subdomainError}
                 noErrorHelper={

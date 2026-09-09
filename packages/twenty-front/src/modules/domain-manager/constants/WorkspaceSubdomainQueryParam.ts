@@ -1,0 +1,2 @@
+// Mirrors WORKSPACE_SUBDOMAIN_QUERY_PARAM on the server.
+export const WORKSPACE_SUBDOMAIN_QUERY_PARAM = 'w';

@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 
 import { DomainServerConfigService } from 'src/engine/core-modules/domain/domain-server-config/services/domain-server-config.service';
 import { buildUrlWithPathnameAndSearchParams } from 'src/engine/core-modules/domain/domain-server-config/utils/build-url-with-pathname-and-search-params.util';
+import { WORKSPACE_SUBDOMAIN_QUERY_PARAM } from 'src/engine/core-modules/domain/workspace-domains/constants/workspace-subdomain-query-param.constant';
 import { WorkspaceDomainConfig } from 'src/engine/core-modules/domain/workspace-domains/types/workspace-domain-config.type';
 import { PublicDomainEntity } from 'src/engine/core-modules/public-domain/public-domain.entity';
 import { TwentyConfigService } from 'src/engine/core-modules/twenty-config/twenty-config.service';
@@ -39,6 +40,24 @@ export class WorkspaceDomainsService {
     hash?: string;
   }) {
     const workspaceUrls = this.getWorkspaceUrls(workspace);
+
+    // Rotate fork: without subdomain routing the subdomain URL is virtual
+    // (only used to resolve the workspace), so links and redirects target the
+    // front URL and carry the workspace as a query parameter instead.
+    if (
+      !isDefined(workspaceUrls.customUrl) &&
+      !this.domainServerConfigService.isWorkspaceSubdomainRoutingEnabled()
+    ) {
+      return buildUrlWithPathnameAndSearchParams({
+        baseUrl: this.domainServerConfigService.getFrontUrl(),
+        pathname,
+        searchParams: {
+          [WORKSPACE_SUBDOMAIN_QUERY_PARAM]: workspace.subdomain,
+          ...searchParams,
+        },
+        hash,
+      });
+    }
 
     const url = buildUrlWithPathnameAndSearchParams({
       baseUrl: new URL(workspaceUrls.customUrl ?? workspaceUrls.subdomainUrl),

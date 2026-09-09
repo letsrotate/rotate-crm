@@ -1,3 +1,4 @@
+import { useWorkspaceSelection } from '@/domain-manager/hooks/useWorkspaceSelection';
 import { domainConfigurationState } from '@/domain-manager/states/domainConfigurationState';
 import { lastAuthenticatedWorkspaceDomainState } from '@/domain-manager/states/lastAuthenticatedWorkspaceDomainState';
 import { useAtomStateValue } from '@/ui/utilities/state/jotai/hooks/useAtomStateValue';
@@ -5,6 +6,7 @@ import { useSetAtomState } from '@/ui/utilities/state/jotai/hooks/useSetAtomStat
 
 export const useLastAuthenticatedWorkspaceDomain = () => {
   const domainConfiguration = useAtomStateValue(domainConfigurationState);
+  const { isSingleHostMode } = useWorkspaceSelection();
   const setLastAuthenticatedWorkspaceDomain = useSetAtomState(
     lastAuthenticatedWorkspaceDomainState,
   );
@@ -13,9 +15,12 @@ export const useLastAuthenticatedWorkspaceDomain = () => {
   ) => {
     setLastAuthenticatedWorkspaceDomain({
       ...(params ? params : {}),
-      cookieAttributes: {
-        domain: `.${domainConfiguration.frontDomain}`,
-      },
+      // With a single host there is no subdomain to share the cookie with.
+      cookieAttributes: isSingleHostMode
+        ? {}
+        : {
+            domain: `.${domainConfiguration.frontDomain}`,
+          },
     });
   };
 
